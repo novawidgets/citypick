@@ -1,4 +1,21 @@
-(function(){
+(function(root, factory) {
+if(typeof exports === 'object') {
+module.exports = factory();
+} else if(typeof define === 'function' && define.amd) {
+define(['module/widget/1.0.1/widget','module/iscroll/5.1.1/iscroll','module/handlebars/1.0.0/handlebars','module/Nova.suggest/1.0.2/suggest','module/Nova.elevator/0.1.0/elevator','module/Nova.scrollTips/0.1.0/scrollTips','module/Nova.pagePanel/0.1.0/pagePanel'], factory);
+} else {
+root['Citypick'] = factory();
+}
+})(this, function(Widget,IScroll,Handlebars,Suggest,Elevator,ScrollTips,PagePanel) {
+Widget = Widget || this.Widget;
+IScroll = IScroll || this.IScroll;
+Handlebars = Handlebars || this.Handlebars;
+Suggest = Suggest || this.Suggest;
+Elevator = Elevator || this.Elevator;
+ScrollTips = ScrollTips || this.ScrollTips;
+PagePanel = PagePanel || this.PagePanel;
+
+
 	var Citypick = Widget.extend({
 		attrs: {
 			element: '.city-panel',
@@ -76,8 +93,7 @@
 				var suggScroll = new IScroll($('.suggest-wrap', cityPanel)[0], {
 					hScrollbar:false,
 					vScrollbar:false,
-					bounce:false,
-					tap: true
+					bounce:false
 				});
 
 				return {
@@ -94,8 +110,7 @@
 					hScrollbar:false,
 					vScrollbar:false,
 					bounce:false,
-					useTransform:false, //为true时移动端易崩溃
-					tap: true
+					useTransform:false //为true时移动端易崩溃
 				});
 				$('.item-wrap', cityPanel).on('tap', '.sugg-item-cont', function(e){
 					$input.val(this.innerHTML);
@@ -258,6 +273,6 @@
 		}
 	});
 
-	this.Citypick = Citypick;
+	return Citypick;
 
-})();
+});
