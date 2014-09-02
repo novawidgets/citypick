@@ -78,7 +78,8 @@
 				var suggScroll = new IScroll($('.suggest-wrap', cityPanel)[0], {
 					hScrollbar:false,
 					vScrollbar:false,
-					bounce:false
+					bounce:false,
+					tap: true
 				});
 
 				return {
@@ -95,7 +96,8 @@
 					hScrollbar:false,
 					vScrollbar:false,
 					bounce:false,
-					useTransform:false //为true时移动端易崩溃
+					useTransform:false, //为true时移动端易崩溃
+					tap: true
 				});
 				$('.item-wrap', cityPanel).on('tap', '.sugg-item-cont', function(e){
 					$input.val(this.innerHTML);
