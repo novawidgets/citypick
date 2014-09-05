@@ -4,14 +4,13 @@
 
 	var PagePanel = Widget.extend({
 		attrs: {
-			siblings: undefined,
-			selecters: {
-				close: '.close'
-			},
+			siblings: ':not(script):not(style)',
+			hash: 'pagepanel',
 			template: '<div class="page-panel"></div>'
 		},
 		setup: function(){
 			var me = this,
+				siblings = this.get('siblings'),
 				$element = this.$element;
 			this._bindEvent();
 			
@@ -19,47 +18,46 @@
 			if (body != $element.parent()[0]) {
 				$(document).ready(function(){
 					$(body).append($element);
-					if (me.$siblings === undefined) {
-						me.$siblings = $element.siblings('div');
-					}
+					me.$siblings = $element.siblings(siblings);
 
 					setTimeout(function(){
-						checkHash(me);
+						me.checkHash();
 					}, 10);
 				});
 			} else {
-				if (me.$siblings === undefined) {
-					me.$siblings = $element.siblings('div');
-				}
+				me.$siblings = $element.siblings(siblings);
 
 				setTimeout(function(){
-					checkHash(me);
+					me.checkHash();
 				}, 10);
 			}
 		},
 		show: function(){
 			var me = this;
+			var hash = this.get('hash');
 			
 			winScrollY = window.scrollY;
 			clearTimeout(pointerEventsTimer);
 			me.$siblings.hide().css('pointer-events', 'none');
 			me.$element.show();
 
-			if (location.hash != '#pagepanel') {
-				location.hash = 'pagepanel';
+			if (location.hash != '#'+hash) {
+				location.hash = hash;
 			}
 
 		},
 		hide: function(){
 			var me = this;
+			var hash = this.get('hash');
 
-			me.$element.hide();
 			me.$siblings.show();
+			me.$element.hide();
+
 			pointerEventsTimer = setTimeout(function(){
 				me.$siblings.css('pointer-events', '');
 			},500);
 
-			if (location.hash == '#pagepanel') {
+			if (location.hash == '#'+hash) {
 				location.hash = this._hash;
 			}
 
@@ -69,6 +67,15 @@
 		isShow: function(){
 			return this.$element.css('display') != 'none';
 		},
+		checkHash: function(){
+			var hash = location.hash;
+
+			if (hash == '#'+this.get('hash')) {
+				!this.isShow() && this.show();
+			} else {
+				this.isShow() && this.hide();
+			}
+		},
 		_bindEvent: function(){
 			var me = this;
 
@@ -76,21 +83,11 @@
 				var oldURL = e.oldURL;
 				var hash = oldURL.lastIndexOf('#') > -1 ? oldURL.slice(oldURL.lastIndexOf('#')+1) : '';
 				me._hash = hash;
-				checkHash(me);
+				me.checkHash();
 			});
 		},
 		_hash: ''
 	});
-
-	function checkHash(panel){
-		var hash = location.hash;
-
-		if (hash == '#pagepanel') {
-			!panel.isShow() && panel.show();
-		} else {
-			panel.isShow() && panel.hide();
-		}
-	};
 
 	this.PagePanel = PagePanel;
 })();

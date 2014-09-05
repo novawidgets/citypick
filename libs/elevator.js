@@ -15,8 +15,8 @@
 			},
 			targetContainer: document,
 			template: '<ul>',
-			elementOffset: 0,
-			itemsPosition: []
+			_elementOffset: 0,
+			_itemsPosition: []
 		},
 		setup: function(){
 			this._bindEvent();
@@ -34,8 +34,8 @@
 
 			this.$element.html(itemHtmlList.join(''));
 
-			elementOffset = this.set('elementOffset',this.$element.offset()[directionMap[attrs.direction]]);
-			itemsPosition = this.set('itemsPosition',getPositionList($('.'+itemClass, this.$element), attrs.direction));
+			_elementOffset = this.set('_elementOffset',this.$element.offset()[directionMap[attrs.direction]]);
+			_itemsPosition = this.set('_itemsPosition',getPositionList($('.'+itemClass, this.$element), attrs.direction));
 		},
 		_bindEvent: function(){
 			var me = this,
@@ -46,19 +46,19 @@
 				index;
 
 			$element.on('touchstart', function(e){
-				var elementOffset = me.get('elementOffset'),
-					itemsPosition = me.get('itemsPosition');
+				var _elementOffset = me.get('_elementOffset'),
+					_itemsPosition = me.get('_itemsPosition');
 
 				e.preventDefault();
 				e.stopPropagation();
 
-				position = e.touches[0]['page'+direction] - elementOffset;
-				index = getIndex(position, itemsPosition);
+				position = e.touches[0]['page'+direction] - _elementOffset;
+				index = getIndex(position, _itemsPosition);
 
 				me.trigger('jump', [{index: index, position: position}]);
 			}).on('touchmove', function(e){
-				var elementOffset = me.get('elementOffset'),
-					itemsPosition = me.get('itemsPosition');
+				var _elementOffset = me.get('_elementOffset'),
+					_itemsPosition = me.get('_itemsPosition');
 
 				e.preventDefault();
 				e.stopPropagation();
@@ -66,9 +66,9 @@
 				var touch = e.touches[0];
 
 				orgPosition = position;
-				position = touch['page'+direction] - elementOffset;
+				position = touch['page'+direction] - _elementOffset;
 
-				var i = getIndex(position, itemsPosition, index, orgPosition);
+				var i = getIndex(position, _itemsPosition, index, orgPosition);
 
 				if (i != index) {
 					index = i;
@@ -81,7 +81,7 @@
 		}
 	});
 
-	/*getIndex(position, itemsPosition, index, orgPosition);*/
+	/*getIndex(position, _itemsPosition, index, orgPosition);*/
 	function getIndex(p, pl, startIndex, op){
 		if(pl.length == 0){ return null; }
 

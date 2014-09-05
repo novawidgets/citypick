@@ -2,40 +2,50 @@
 	var Citypick = Widget.extend({
 		attrs: {
 			element: '.city-panel',
-			panel: null,
-			refresh: function(){}
+			needSuggest: true,
+			needElevator: true,
+			needScrollTip: true,
+			selecters: {
+				form: '.input-box form',
+				input: '.input-box input',
+				cancelSugg: '.input-box button',
+				cancelPanel: '.panel-cancel',
+				suggestWrap: '.suggest-wrap',
+				jumpTarget: 'dt',
+				itemTemplate: '.item-template',
+				suggTemplate: '.sugg-template'
+			}
 		},
 		setup: function(){
 			var cp = this;
 
 			var cityList = this.get('cityList'),
 				cityGroupList = this.get('cityGroupList'),
-				cityPanel = this.$element;
+				cityPanel = this.$element,
+				needElevator = this.get('needElevator'),
+				needScrollTip = this.get('needScrollTip'),
+				jumpTarget = this.get('selecters.jumpTarget');
 
-			var cityPanel,
-				panel,
+			var panel,
 				elevator,
 				scrollTip,
 				itemScroll,
-				targetList,
-				sugg;
+				targetList;
 
-			var itemTemplate = Handlebars.compile($('.item-template', cityPanel).html());
-			var suggTemplate = Handlebars.compile($('.sugg-template', cityPanel).html());
+			var itemTemplate = Handlebars.compile($(this.get('selecters.itemTemplate'), cityPanel).html());
+			var suggTemplate = Handlebars.compile($(this.get('selecters.suggTemplate'), cityPanel).html());
 
-			var $input = $('.input-box input', cityPanel),
-				$cancel = $('.input-box button', cityPanel),
-				$form = $('.input-box form', cityPanel);
+			var $form = $(this.get('selecters.form'), cityPanel),
+				$input = $(this.get('selecters.input'), cityPanel),
+				$cancelSuggBtn = $(this.get('selecters.cancelSugg'), cityPanel),
+				$cancelPanelBtn = $(this.get('selecters.cancelPanel'), cityPanel);
 
 			var initSuggest = function(cityList){
 				var orgValue;
-
-				var $input = $('.input-box input', cityPanel),
-					$cancel = $('.input-box button', cityPanel);
+				var suggestWrap = cityPanel.find(cp.get('selecters.suggestWrap'))
 
 				var suggest = new Suggest({
-					element: $('.input-box input', cityPanel),
-					// parentNode: cityPanel.find('.suggest-wrap'),
+					element: $input,
 					getData: function(key) {
 						var list = [];
 
@@ -59,21 +69,20 @@
 							suggScroll.refresh();
 						},0);
 					},
-					// template: '<div class="{$classNames.container}"><div class="{$classNames.list}"></div></div>'
-					template: cityPanel.find('.suggest-wrap')
+					template: suggestWrap
 				});
 				$input.on('focus', function(e){
 					orgValue = this.value;
 					suggest.$suggest.show();
-					$cancel.show();
+					$cancelSuggBtn.show();
 				});
-				$cancel.on('click', function(e){
+				$cancelSuggBtn.on('click', function(e){
 					suggest.$suggest.hide();
 					$input.val(orgValue||'');
-					$cancel.hide();
+					$cancelSuggBtn.hide();
 				});
 
-				var suggScroll = new IScroll($('.suggest-wrap', cityPanel)[0], {
+				var suggScroll = new IScroll(suggestWrap[0], {
 					hScrollbar:false,
 					vScrollbar:false,
 					bounce:false,
@@ -109,66 +118,71 @@
 
 				function showTip(){
 					clearTimeout(timer);
-					$tip.show();
-					elevator.$element.addClass('active');
+					scrollTip && $tip.show();
+					elevator && elevator.$element.addClass('active');
 				}
 				function hideTip(){
 					if (elevatorActive || scrollActive) {
 						return;
 					}
 					timer = setTimeout(function(){
-						$tip.hide();
-						elevator.$element.removeClass('active');
+						scrollTip && $tip.hide();
+						elevator && elevator.$element.removeClass('active');
 					}, 200);
 				}
 
-				elevator = new Elevator({
-					element: $('.item-elevator', cityPanel),
-					selecters: {
-						target: 'dt'
-					},
-					targetContainer: itemScroll.wrapper
-				});
-				elevator.on('jump', function(e, data){
-					var elementOffset = IScroll.utils.offset(itemScroll.wrapper).top;
-					var p = -targetList.get(data.index).offsetTop;
+				if (needElevator) {
+					elevator = cp.elevator = new Elevator({
+						element: $('.item-elevator', cityPanel),
+						selecters: {
+							target: jumpTarget
+						},
+						targetContainer: itemScroll.wrapper
+					});
+					elevator.on('jump', function(e, data){
+						var elementOffset = IScroll.utils.offset(itemScroll.wrapper).top;
+						var p = -targetList.get(data.index).offsetTop;
 
-					itemScroll.scrollTo(0,p);
-					itemScroll._execEvent('scroll');
+						itemScroll.scrollTo(0,p);
+						itemScroll._execEvent('scroll');
 
-				});
-				elevator.$element.on('touchstart', function(e){
-					elevatorActive = true;
-					showTip();
-				}).on('touchend', function(e){
-					elevatorActive = false;
-					hideTip();
-				});
+					});
+					elevator.$element.on('touchstart', function(e){
+						elevatorActive = true;
+						showTip();
+					}).on('touchend', function(e){
+						elevatorActive = false;
+						hideTip();
+					});
+				}
 
-				scrollTip = new ScrollTips({
-					element: $tip,
-					itemScroll: itemScroll,
-					selecters: {
-						target: 'dt'
-					}
-				});
-				scrollTip.on('change', function(e, data){
-					this.$element.text(targetList.get(data.index).innerHTML)
-				}).on('posStart', function(e){
-					scrollActive = true;
-					showTip();
-				}).on('posEnd', function(e){
-					scrollActive = false;
-					hideTip();
-				});
+				if (needScrollTip) {
+					scrollTip = cp.scrollTip = new ScrollTips({
+						element: $tip,
+						itemScroll: itemScroll,
+						selecters: {
+							target: jumpTarget
+						}
+					});
+					scrollTip.on('change', function(e, data){
+						this.$element.text(targetList.get(data.index).innerHTML)
+					}).on('posStart', function(e){
+						scrollActive = true;
+						showTip();
+					}).on('posEnd', function(e){
+						scrollActive = false;
+						hideTip();
+					});
+				}
 			};
 			var initPanel = function(){
-				var pagePanel = new PagePanel({
-					element: cityPanel
+				var pagePanel = cp.pagePanel = new PagePanel({
+					element: cityPanel,
+					hash: 'citypick'
 				});
 				var inputVal = '';
 
-				panel = {
+				panel = cp._panel = {
 					show: function(val){
 						inputVal = val || '';
 						pagePanel.show();
@@ -183,28 +197,31 @@
 				});
 				pagePanel.after('hide', function(e){
 					$input.val('');
-					$cancel.hide();
+					$cancelSuggBtn.hide();
 					itemScroll.scrollTo(0,0);
 					itemScroll._execEvent('scroll');
 				});
 
-				$('.panel-cancel', cityPanel).on('click', function(e){
+				$cancelPanelBtn.on('click', function(e){
 					panel.hide();
 				});
 			};
 
-			initSuggest(cityList);
+			if (this.get('needSuggest')) {
+				cp.suggest = initSuggest(cityList);
+			}
 			initCityItem(cityGroupList);
 			initPanel();
 
 			function refresh(){
 				setTimeout(function(){
-					targetList = $(itemScroll.scroller).find('dt');
+					targetList = $(itemScroll.scroller).find(jumpTarget);
 					itemScroll.refresh();
-					elevator.refresh();
-					scrollTip.refresh();
+					elevator && elevator.refresh();
+					scrollTip && scrollTip.refresh();
 				},0);
 			};
+			cp.refresh = refresh;
 
 			$form.on('submit', function(e){
 				e.preventDefault();
@@ -240,21 +257,17 @@
 					}
 				});
 			});
-
-			this.set('panel', panel);
-			this.set('refresh', refresh);
 		},
 		show: function(val){
-			var panel = this.get('panel');
-			panel.show(val);
+			this._panel.show(val);
 		},
 		hide: function(){
-			var panel = this.get('panel');
-			panel.hide();
+			this._panel.hide();
 		},
-		refresh: function(){
-			var refresh = this.get('refresh');
-			refresh();
+		refresh: function(){},
+		_panel: {
+			show: function(){},
+			hide: function(){}
 		}
 	});
 
