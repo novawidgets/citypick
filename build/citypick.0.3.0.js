@@ -1,3 +1,5 @@
+/* Version 0.3.0 */
+
 (function(){
 	var Citypick = Widget.extend({
 		attrs: {

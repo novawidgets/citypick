@@ -330,10 +330,11 @@
 })();
 </script>
 <script type="text/javascript">
+	var cityPanel = $('.city-panel')
 	var citypick = new Citypick({
 		cityList: cityList,
 		cityGroupList: list,
-		element: $('.city-panel'),
+		element: cityPanel,
 		needSuggest: true
 	});
 
@@ -343,7 +344,32 @@
 	citypick.on('select', function(e, d){
 		$('#test').val(d.value);
 	});
-	citypick.pagePanel.set('hash', 'citypick');
+	/*citypick.on('setup', function(e, d){
+		var locationIp = '';
+		$.ajax({
+			url:"http://open.onebox.so.com/api/hotcity",
+			dataType:"jsonp",
+			data:{"ip":locationIp},
+			success:function(data){
+				var city = "";
+				if(data && data.location){
+					city = data.location;
+				}
+				$('.cp-location', cityPanel).html(city);
+
+				if (data && data.hot) {
+					var hot = $.map(data.hot, function(item){
+						return {name: item};
+					});
+					var html = cp.itemTemplate({list:{'热':hot}});
+					$('.item-hot', cityPanel).html(html);
+				}
+
+				citypick.refresh();
+			}
+		});
+	})*/
+	citypick.plugins.pagePanel.set('hash', 'citypick');
 </script>
 </body>
 </html>

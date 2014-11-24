@@ -1,7 +1,5 @@
 (function(){
-	var elementOffset,
-		itemsPosition,
-		directionMap = {
+	var directionMap = {
 			X: 'left',
 			Y: 'top'
 		};
@@ -12,7 +10,9 @@
 			itemScroll: null,
 			selecters: {
 				target: '.scrolltips-target'
-			}
+			},
+			elementOffset: null,
+			itemsPosition: null
 		},
 		setup: function(){
 			if (this.get('itemScroll') == null) {
@@ -28,6 +28,9 @@
 
 			elementOffset = IScroll.utils.offset(itemScroll.wrapper);
 			itemsPosition = getPositionList(targetList, directionMap[direction], itemScroll);
+
+			this.set('elementOffset', elementOffset);
+			this.set('itemsPosition', itemsPosition);
 		},
 		_bindEvent: function(){
 			var me = this,
@@ -50,6 +53,8 @@
 					me.trigger('posEnd');
 				}, 50);
 
+				var elementOffset = me.get('elementOffset'),
+					itemsPosition = me.get('itemsPosition');
 
 				orgPosition = position;
 				position = -(this.y + elementOffset[directionMap[direction]]);

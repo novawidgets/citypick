@@ -1,21 +1,21 @@
 {
     "citypick": {
-        "version": "0.2.0",
+        "version": "0.3.0",
         "files" : {
-            "build/citypick.0.2.0.js" : [
+            "build/citypick.0.3.0.js" : [
                 "src/citypick.js"
             ]
         },
         "module": "Nova.citypick",
         "src": "src/citypick.js",
         "requires": {
-            "widget": "module/widget/1.0.1/widget",
+            "widget": "module/widget/1.0.2/widget",
             "IScroll": "module/iscroll/5.1.1/iscroll",
             "handlebars": "module/handlebars/1.0.0/handlebars",
             "suggest": "module/Nova.suggest/1.0.2/suggest",
-            "elevator": "module/Nova.elevator/0.1.0/elevator",
-            "scrollTips": "module/Nova.scrollTips/0.1.0/scrollTips",
-            "pagePanel": "module/Nova.pagePanel/0.1.0/pagePanel"
+            "elevator": "module/Nova.elevator/0.3.0/elevator",
+            "scrollTips": "module/Nova.scrollTips/0.3.0/scrollTips",
+            "pagePanel": "module/Nova.pagePanel/0.3.0/pagePanel"
         }
     }
 }

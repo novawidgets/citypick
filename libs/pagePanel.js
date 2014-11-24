@@ -1,7 +1,4 @@
 (function(){
-	var winScrollY,
-		pointerEventsTimer;
-
 	var PagePanel = Widget.extend({
 		attrs: {
 			siblings: ':not(script):not(style)',
@@ -36,8 +33,8 @@
 			var me = this;
 			var hash = this.get('hash');
 			
-			winScrollY = window.scrollY;
-			clearTimeout(pointerEventsTimer);
+			me.winScrollY = window.scrollY;
+			clearTimeout(me.pointerEventsTimer);
 			me.$siblings.hide().css('pointer-events', 'none');
 			me.$element.show();
 
@@ -53,7 +50,7 @@
 			me.$siblings.show();
 			me.$element.hide();
 
-			pointerEventsTimer = setTimeout(function(){
+			me.pointerEventsTimer = setTimeout(function(){
 				me.$siblings.css('pointer-events', '');
 			},500);
 
@@ -61,7 +58,7 @@
 				location.hash = this._hash;
 			}
 
-			window.scrollTo(0,winScrollY);
+			window.scrollTo(0, me.winScrollY);
 
 		},
 		isShow: function(){
@@ -86,7 +83,9 @@
 				me.checkHash();
 			});
 		},
-		_hash: ''
+		_hash: '',
+		_winScrollY: 0,
+		_pointerEventsTimer: null
 	});
 
 	this.PagePanel = PagePanel;
