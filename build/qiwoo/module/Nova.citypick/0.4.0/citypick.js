@@ -1,4 +1,21 @@
-(function(){
+(function(root, factory) {
+if(typeof exports === 'object') {
+module.exports = factory();
+} else if(typeof define === 'function' && define.amd) {
+define(['module/widget/1.0.2/widget','module/iscroll/5.1.1/iscroll','module/handlebars/1.0.0/handlebars','module/Nova.suggest/1.0.2/suggest','module/Nova.elevator/0.3.0/elevator','module/Nova.scrollTips/0.3.0/scrollTips','module/Nova.pagePanel/0.3.0/pagePanel'], factory);
+} else {
+root['Citypick'] = factory();
+}
+})(this, function(Widget,IScroll,Handlebars,Suggest,Elevator,ScrollTips,PagePanel) {
+Widget = Widget || this.Widget;
+IScroll = IScroll || this.IScroll;
+Handlebars = Handlebars || this.Handlebars;
+Suggest = Suggest || this.Suggest;
+Elevator = Elevator || this.Elevator;
+ScrollTips = ScrollTips || this.ScrollTips;
+PagePanel = PagePanel || this.PagePanel;
+
+
 	var Citypick = Widget.extend({
 		attrs: {
 			element: '.city-panel',
@@ -253,6 +270,6 @@
 		refresh: function(){}
 	});
 
-	this.Citypick = Citypick;
+	return Citypick;
 
-})();
+});

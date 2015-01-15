@@ -1,0 +1,211 @@
+.page-panel {
+	background: white;
+	position: fixed;
+	z-index: 101;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.city-panel .input-wrap {
+	position: relative;
+	z-index: 1;
+	background: #eeeeee;
+	padding: 5px;
+	-webkit-box-shadow: 0 0px 4px 1px;
+	box-shadow: 0 0px 4px 1px;
+}
+.city-panel .input-box {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	height: 35px;
+	border: 1px solid #cbcbcb;
+	background: white;
+	overflow: hidden; /*不加，input框右侧显示有bug*/
+}
+.city-panel .input-box form {
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+}
+.city-panel .input-box input {
+	display: block;
+	width: 100%;
+	height: 35px;
+	outline: none;
+	padding: 0 5px;
+	font-family: "Microsoft Yahei";
+	font-size: 14px;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.city-panel .input-box button {
+	display: block;
+	margin: 5px 0;
+	padding: 0 10px;
+	border-left: 1px solid #cbcbcb;
+	background-color: white;
+	color: #999;
+	outline: none;
+	font-size: 14px;
+}
+
+.city-panel .city-wrap {
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+	position: relative;
+}
+.city-panel .item-wrap,
+.city-panel .suggest-wrap {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.city-panel .item-wrap {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+.city-panel .item-location button {
+	display: inline-block;
+	height: 2em;
+	outline: none;
+	background-color: #fff;
+	font-family: "Microsoft Yahei";
+	border-radius: 3px;
+	box-shadow: 1px 1px 3px rgba(0,0,0,.3);
+	padding: 0 10px;
+	margin-left: 10px;
+}
+.city-panel .item-data {
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+	position: relative;
+	overflow: hidden;
+}
+.city-panel .item-scroller {
+	width: 100%;
+	z-index: 0;
+	position: absolute;
+}
+.city-panel .item-elevator {
+	position: absolute;
+	z-index: 1;
+	right: 10px;
+	top: 10px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	font-size: small;
+	color: #c5c8cf;
+	text-align: center;
+	max-height: 95%;
+}
+.city-panel .item-elevator.active {
+	background: rgba(0,0,0,.2);
+	color: white;
+}
+.city-panel .item-elevator li {
+	-webkit-flex: 0 1 1.5em;
+	flex: 0 1 1.5em;
+	padding: 0 20px;
+	margin-left: -10px;
+	margin-right: -10px;
+}
+.city-panel .item-elevator li:first-child {
+	padding-top: .5em;
+}
+.city-panel .item-elevator li:last-child {
+	padding-bottom: .5em;
+}
+
+.city-panel .item-tip {
+	position: absolute;
+	z-index: 1;
+	top: 10px;
+	right: 50px;
+	width: 50px;
+	line-height: 50px;
+	font-size: 34px;
+	font-family: Microsoft Yahei;
+	text-align: center;
+	background: #5cb642;
+	color: white;
+}
+
+.city-panel .suggest-wrap {
+	background: rgba(255,255,255,.9);
+	display: none;
+}
+
+
+/*item-list*/
+.city-panel .list-item {
+	border-bottom: 1px solid #cccccc;
+	text-align: left;
+	padding: 14px 35px;
+}
+.city-panel .suggest-wrap .list-item {
+	padding: 14px 15px;
+}
+.city-panel .city-curr {
+	line-height: 28px;
+}
+.city-panel .city-wrap dt {
+	background: #e9e9e9;
+
+}
+.city-panel .city-wrap .item-hot dt::before{
+	content: "";
+	display: inline-block;
+	width: 13px;
+	height: 16px;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAgCAYAAAAMq2gFAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1QTk4QThCNTAyNzJFMzExOUU0QkJBQjhBNUU1NEVCNCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo5NzIzQ0QwNzgzNDIxMUUzOEU1N0IyNTc5REMyNjUxMiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo5NzIzQ0QwNjgzNDIxMUUzOEU1N0IyNTc5REMyNjUxMiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpkOGZmYWY0Zi05NGI2LTQ0NTItYjNjOS00MzQ1ODlkMmZiNDkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NUE5OEE4QjUwMjcyRTMxMTlFNEJCQUI4QTVFNTRFQjQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6eG/5JAAACo0lEQVR42rSWXUgVURDHrzfNbpKaJSF4LcxAIRVTkaIPrAiKQEkIExSkuohBPklBQVLvPmYa0UPQo4L5oEhPmQV9IFqREJZmCiJpoURZ2X9gFobD2dndqw382N2z58x/95w5cyYhFouF1mAVoBh0eXUMxymQAK6DIfDGz4DEOES2gIfgNJgEz/6HUCYYACX83A9W11toO3gMCkXbc7+D/a7RJtBniIT8rk8QodscYabNKWN2gvQgQrWgMY4P3Qoa/AqlgXYPZ26WCs7bhKJgg9G5FWQpzqIe74pAuSnUAv6I5xRwyeOPDyrvyvlaJ4XyQJXR8YxcTBdr4CmyZQ7HX7UUoi/PsASBl+0AnSDJaG8Cu/iervm0YZNBPQvR4i6ACKi0OP4NfoHNxgcV8BaglHQYXDHGVZLQEbBNZON+FokYnT+DGtBtCIU4g3cqf15KU3dKNBzl6zGj4wde+BecVINaIQmViYazvJAymr6Bk2BKTJ/NVhShnDBHnEwbFCX7RNs1/iPHvlocLYE7ilB6WKyPY10iq89ZTs9ZiyMSGVSEksIcReZx4Fi3ZUqGjGea0lvgvSI0S0ITSod3lra7YFkcExRM38Gi4meMpmgU7A0QQZ94G9D+GwF/uT2ijBmmP3qidNjj0v4WvBYiZNmKnwES6jUGSKu2ZHQ32+/SThH7koRmlIiJ8h7yU36dc3lHGWPVSao3lWqmDWz0EKIDrtTSPg06ZPYeVqpNcvDI5QCkdHRD2ayXnQiV5dZVznF5lgEnwEcOnAmeqlxOVckuIg9Aj62uW+T1oNotxzKQHB73GRhUZF7UqhiKkAPg6RoK/w4+XX96lUtf+PC6AMYDCLziKW42RbSSmPbVPXCf142m7BDYzfX3DzAvivwer/L4nwADAOMid0Viwz30AAAAAElFTkSuQmCC) no-repeat;
+	-webkit-background-size: cover;
+	background-size: cover;
+	margin-right: 7px;
+	margin-left: -20px;
+	vertical-align: middle;
+}
+.city-panel .sugg-item {
+	display: -webkit-box;
+}
+.city-panel .sugg-item-cont {
+	-webkit-box-flex: 1;
+}
+.city-panel .sugg-item-copy {
+	background: url('http://p1.qhimg.com/t0129eae3267053f012.png') no-repeat center center;
+	background-size: 13px 11px;
+	width: 13px;
+}
+.city-panel .item-location{
+	padding: 14px 15px 14px 35px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-pack:justify;
+	-webkit-justify-content:space-between;
+	justify-content:space-between;
+	background: #eee;
+}
