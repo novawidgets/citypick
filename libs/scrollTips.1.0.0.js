@@ -1,3 +1,5 @@
+/* Version 1.0.0 */
+
 (function(){
 	var directionMap = {
 			X: 'left',
@@ -8,7 +10,7 @@
 		attrs: {
 			direction: 'Y',
 			itemScroll: null,
-			selecters: {
+			selectors: {
 				target: '.scrolltips-target'
 			},
 			elementOffset: null,
@@ -23,7 +25,7 @@
 		refresh: function(){
 			var direction = this.get('direction'),
 				itemScroll = this.get('itemScroll'),
-				targetCls = this.get('selecters.target'),
+				targetCls = this.get('selectors.target'),
 				targetList = $(targetCls, itemScroll.scroller);
 
 			elementOffset = IScroll.utils.offset(itemScroll.wrapper);

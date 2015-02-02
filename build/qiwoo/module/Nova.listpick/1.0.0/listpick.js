@@ -1,31 +1,46 @@
-(function(){
-	var Citypick = Widget.extend({
+(function(root, factory) {
+if(typeof exports === 'object') {
+module.exports = factory.apply(root);
+} else if(typeof define === 'function' && define.amd) {
+define(['module/widget/1.0.2/widget','module/iscroll/5.1.1/iscroll','module/handlebars/1.0.0/handlebars','module/Nova.suggest/1.0.2/suggest','module/Nova.elevator/1.0.0/elevator','module/Nova.scrollTips/1.0.0/scrollTips','module/Nova.pagePanel/1.0.0/pagePanel'], function() {return factory.apply(root, arguments)});
+} else {
+root['Listpick'] = factory.apply(root);
+}
+})(this, function(widget,IScroll,handlebars,suggest,elevator,scrollTips,pagePanel) {
+widget = widget || this.widget;
+IScroll = IScroll || this.IScroll;
+handlebars = handlebars || this.handlebars;
+suggest = suggest || this.suggest;
+elevator = elevator || this.elevator;
+scrollTips = scrollTips || this.scrollTips;
+pagePanel = pagePanel || this.pagePanel;
+
+
+	var Listpick = Widget.extend({
 		attrs: {
-			element: '.city-panel',
+			element: '.listpick-panel',
 			needSuggest: true,
 			needElevator: true,
 			needScrollTip: true,
-			selecters: {
+			selectors: {
 				form: '.input-box form',
 				input: '.input-box input',
 				cancelSugg: '.input-box button',
 				cancelPanel: '.panel-cancel',
 				suggestWrap: '.suggest-wrap',
-				jumpTarget: 'dt',
-				itemTemplate: '.item-template',
-				suggTemplate: '.sugg-template'
+				jumpTarget: 'dt'
 			}
 		},
 		setup: function(){
 			var cp = this;
 			cp.plugins = {};
 
-			var cityList = this.get('cityList'),
-				cityGroupList = this.get('cityGroupList'),
-				cityPanel = this.$element,
+			var list = this.get('list'),
+				groupList = this.get('groupList'),
+				listPanel = this.$element,
 				needElevator = this.get('needElevator'),
 				needScrollTip = this.get('needScrollTip'),
-				jumpTarget = this.get('selecters.jumpTarget');
+				jumpTarget = this.get('selectors.jumpTarget');
 
 			var panel,
 				elevator,
@@ -33,37 +48,37 @@
 				itemScroll,
 				targetList;
 
-			var itemTemplate = cp.itemTemplate = Handlebars.compile($(this.get('selecters.itemTemplate'), cityPanel).html());
-			var suggTemplate = cp.suggTemplate = Handlebars.compile($(this.get('selecters.suggTemplate'), cityPanel).html());
+			cp.itemTemplateFun = this.get('itemTemplateFun');
+			cp.suggTemplateFun = this.get('suggTemplateFun');
 
-			var $form = $(this.get('selecters.form'), cityPanel),
-				$input = $(this.get('selecters.input'), cityPanel),
-				$cancelSuggBtn = $(this.get('selecters.cancelSugg'), cityPanel),
-				$cancelPanelBtn = $(this.get('selecters.cancelPanel'), cityPanel);
+			var $form = $(this.get('selectors.form'), listPanel),
+				$input = $(this.get('selectors.input'), listPanel),
+				$cancelSuggBtn = $(this.get('selectors.cancelSugg'), listPanel),
+				$cancelPanelBtn = $(this.get('selectors.cancelPanel'), listPanel);
 
-			var initSuggest = function(cityList){
+			var initSuggest = function(list){
 				var orgValue;
-				var suggestWrap = cityPanel.find(cp.get('selecters.suggestWrap'))
+				var suggestWrap = listPanel.find(cp.get('selectors.suggestWrap'))
 
 				var suggest = new Suggest({
 					element: $input,
 					getData: function(key) {
-						var list = [];
+						var rlist = [];
 
 						if(key){
-							$.each(cityList, function(index, item){
+							$.each(list, function(index, item){
 								var index = ','+item.index.toLowerCase()+','+item.name;
 
 								if (index.indexOf(','+key.toLowerCase()) > -1) {
-									list.push(item);
+									rlist.push(item);
 								};
 							});
 						}
 
-						this.renderList(list);
+						this.renderList(rlist);
 					},
 					renderList: function(data, options) {
-						var html = suggTemplate({list:data});
+						var html = cp.suggTemplateFun({list:data});
 
 						this.$list.html(html);
 						setTimeout(function(){
@@ -96,11 +111,11 @@
 					suggScroll: suggScroll
 				};
 			};
-			var initCityItem = function(cityList){
-				var html = itemTemplate({list:cityList});
-				$('.item-list', cityPanel).html(html);
+			var initListItem = function(list){
+				var html = cp.itemTemplateFun({list:list});
+				$('.item-list', listPanel).html(html);
 
-				itemScroll = new IScroll($('.item-data', cityPanel)[0], {
+				itemScroll = new IScroll($('.item-data', listPanel)[0], {
 					probeType: 3,
 					hScrollbar:false,
 					vScrollbar:false,
@@ -108,7 +123,7 @@
 					useTransform:false, //为true时移动端易崩溃
 					tap: true
 				});
-				$('.item-wrap', cityPanel).on('tap', '.sugg-item-cont', function(e){
+				$('.item-wrap', listPanel).on('tap', '.sugg-item-cont', function(e){
 					$input.val(this.innerHTML);
 					$form.submit();
 				});
@@ -116,7 +131,7 @@
 				var elevatorActive = false,
 					scrollActive = false,
 					timer,
-					$tip = $('.item-tip', cityPanel);
+					$tip = $('.item-tip', listPanel);
 
 				function showTip(){
 					clearTimeout(timer);
@@ -135,8 +150,8 @@
 
 				if (needElevator) {
 					elevator = new Elevator({
-						element: $('.item-elevator', cityPanel),
-						selecters: {
+						element: $('.item-elevator', listPanel),
+						selectors: {
 							target: jumpTarget
 						},
 						targetContainer: itemScroll.wrapper
@@ -162,7 +177,7 @@
 					scrollTip = new ScrollTips({
 						element: $tip,
 						itemScroll: itemScroll,
-						selecters: {
+						selectors: {
 							target: jumpTarget
 						}
 					});
@@ -179,8 +194,8 @@
 			};
 			var initPanel = function(){
 				var pagePanel = new PagePanel({
-					element: cityPanel,
-					hash: 'citypick'
+					element: listPanel,
+					hash: 'listpick'
 				});
 				var inputVal = '';
 
@@ -223,9 +238,9 @@
 			cp.refresh = refresh;
 
 			if (this.get('needSuggest')) {
-				cp.plugins.suggest = initSuggest(cityList);
+				cp.plugins.suggest = initSuggest(list);
 			}
-			initCityItem(cityGroupList);
+			initListItem(groupList);
 			cp.plugins.pagePanel = initPanel();
 
 			$.extend(cp.plugins, {
@@ -253,6 +268,6 @@
 		refresh: function(){}
 	});
 
-	this.Citypick = Citypick;
+	return Listpick;
 
-})();
+});

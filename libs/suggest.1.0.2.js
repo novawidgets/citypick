@@ -1,3 +1,5 @@
+/* Version 1.0.2 */
+
 (function() {
 
     // 功能
@@ -71,9 +73,9 @@
 
             // 替换template中的{$className}占位符
             var template = this.get('template');
-            typeof template == 'string' && (template = template.replace(/{\$([^\})]*)}/g, function() {
+            typeof template == 'string' && template.replace(/{\$([^\})]*)}/g, function() {
                 return me.get(arguments[1]);
-            }));
+            });
 
             // 生成Suggest DOM元素
             this.$suggest = $(template);
@@ -87,7 +89,7 @@
             this.$form = this.get('formId') ? $('#' + this.get('formId')) : this.$element.closest('form');
             var parentNode = this.get('parentNode') ? $(this.get('parentNode')) : this.$form;
             var suggest = this.$suggest[0];
-            !suggest.ownerDocument.contains(suggest) && parentNode.append(this.$suggest);
+            !suggest.ownerDocument.body.contains(suggest) && parentNode.append(this.$suggest);
             this.$suggest.hide();
 
             // 设置自定义方法

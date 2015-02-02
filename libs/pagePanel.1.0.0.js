@@ -1,13 +1,14 @@
+/* Version 1.0.0 */
+
 (function(){
 	var PagePanel = Widget.extend({
 		attrs: {
-			siblings: ':not(script):not(style)',
+			siblings: ':not(script):not(style):not([style^="display: none"]):not([style*=" display: none"])',
 			hash: 'pagepanel',
 			template: '<div class="page-panel"></div>'
 		},
 		setup: function(){
 			var me = this,
-				siblings = this.get('siblings'),
 				$element = this.$element;
 			this._bindEvent();
 			
@@ -15,14 +16,12 @@
 			if (body != $element.parent()[0]) {
 				$(document).ready(function(){
 					$(body).append($element);
-					me.$siblings = $element.siblings(siblings);
 
 					setTimeout(function(){
 						me.checkHash();
 					}, 10);
 				});
 			} else {
-				me.$siblings = $element.siblings(siblings);
 
 				setTimeout(function(){
 					me.checkHash();
@@ -30,12 +29,17 @@
 			}
 		},
 		show: function(){
-			var me = this;
+			var me = this,
+				siblings = this.get('siblings'),
+				$element = this.$element;
+
 			var hash = this.get('hash');
+
+			me.$siblings = $element.siblings(siblings);
 			
 			me.winScrollY = window.scrollY;
 			clearTimeout(me.pointerEventsTimer);
-			me.$siblings.hide().css('pointer-events', 'none');
+			me.$siblings && me.$siblings.hide().css('pointer-events', 'none');
 			me.$element.show();
 
 			if (location.hash != '#'+hash) {
@@ -47,12 +51,14 @@
 			var me = this;
 			var hash = this.get('hash');
 
-			me.$siblings.show();
-			me.$element.hide();
+			if(me.$siblings){
+				me.$siblings.show();
+				me.pointerEventsTimer = setTimeout(function(){
+					me.$siblings.css('pointer-events', '');
+				},500);
+			}
 
-			me.pointerEventsTimer = setTimeout(function(){
-				me.$siblings.css('pointer-events', '');
-			},500);
+			me.$element.hide();
 
 			if (location.hash == '#'+hash) {
 				location.hash = this._hash;
