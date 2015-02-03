@@ -6,14 +6,14 @@ define(['module/widget/1.0.2/widget','module/iscroll/5.1.1/iscroll','module/hand
 } else {
 root['Listpick'] = factory.apply(root);
 }
-})(this, function(widget,IScroll,handlebars,suggest,elevator,scrollTips,pagePanel) {
-widget = widget || this.widget;
+})(this, function(Widget,IScroll,Handlebars,Suggest,Elevator,ScrollTips,PagePanel) {
+Widget = Widget || this.Widget;
 IScroll = IScroll || this.IScroll;
-handlebars = handlebars || this.handlebars;
-suggest = suggest || this.suggest;
-elevator = elevator || this.elevator;
-scrollTips = scrollTips || this.scrollTips;
-pagePanel = pagePanel || this.pagePanel;
+Handlebars = Handlebars || this.Handlebars;
+Suggest = Suggest || this.Suggest;
+Elevator = Elevator || this.Elevator;
+ScrollTips = ScrollTips || this.ScrollTips;
+PagePanel = PagePanel || this.PagePanel;
 
 
 	var Listpick = Widget.extend({

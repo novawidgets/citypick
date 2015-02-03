@@ -9,13 +9,13 @@
         "module": "Nova.listpick",
         "src": "src/listpick.js",
         "requires": {
-            "widget": "module/widget/1.0.2/widget",
+            "Widget": "module/widget/1.0.2/widget",
             "IScroll": "module/iscroll/5.1.1/iscroll",
-            "handlebars": "module/handlebars/1.0.0/handlebars",
-            "suggest": "module/Nova.suggest/1.0.2/suggest",
-            "elevator": "module/Nova.elevator/1.0.0/elevator",
-            "scrollTips": "module/Nova.scrollTips/1.0.0/scrollTips",
-            "pagePanel": "module/Nova.pagePanel/1.0.0/pagePanel"
+            "Handlebars": "module/handlebars/1.0.0/handlebars",
+            "Suggest": "module/Nova.suggest/1.0.2/suggest",
+            "Elevator": "module/Nova.elevator/1.0.0/elevator",
+            "ScrollTips": "module/Nova.scrollTips/1.0.0/scrollTips",
+            "PagePanel": "module/Nova.pagePanel/1.0.0/pagePanel"
         }
     }
 }
