@@ -7,9 +7,7 @@
 该组件是多个组件功能的组合。具体功能需参考相关的组件。
 
 ### Javascript
-需先引入依赖的文件：Zepto基础库
-iscroll、handlebars
-nova框架、suggest、elevator、scrollTips、pagePanel
+需先引入依赖的文件：Zepto基础库、iscroll、handlebars、nova框架、suggest、elevator、scrollTips、pagePanel
 
 ```markup
 <script type="text/javascript" src="http://s1.qhimg.com/static/c8b7de8c67377042/widget.1.0.2.js"></script>
@@ -62,6 +60,59 @@ nova框架、suggest、elevator、scrollTips、pagePanel
         content: "门城市";
     }
 </style>
+```
+
+### html
+```markup
+<div class="listpick-panel page-panel" style="display: none;">
+    <div class="input-wrap">
+        <div class="input-box">
+            <form class="input-form">
+                <input type="text" placeholer="请输入城市名称"/>
+            </form>
+            <button type="button" style="display: none;">X</button>
+        </div>
+    </div>
+    <div class="list-wrap">
+        <div class="item-wrap">
+            <div class="item-location list-item">
+                <div class="city-curr">当前城市：<span class="cp-location sugg-item-cont"></span></div>
+                <button type="button" class="panel-cancel">取消</button>
+            </div>
+            <div class="item-data">
+                <div class="item-scroller">
+                    <div class="item-hot"></div>
+                    <div class="item-list"></div>
+                </div>
+                <ul class="item-elevator"></ul>
+                <div class="item-tip"></div>
+            </div>
+        </div>
+        <div class="suggest-wrap">
+            <div class="sugg-list"></div>
+        </div>
+    </div>
+    <script type="text/x-handlebars-template" class="item-template">
+        {{#each list}}
+            <dl>
+                <dt class="list-item" data-key="{{@key}}">{{@key}}</dt>
+                {{#each this}}
+                    <dd class="list-item sugg-item sugg-item-cont">{{this.name}}</dd>
+                {{/each}}
+            </dl>
+        {{/each}}
+    </script>
+    <script type="text/x-handlebars-template" class="sugg-template">
+        <ul>
+            {{#each list}}
+                <li class="list-item sugg-item">
+                    <div class="sugg-item-cont">{{this.name}}</div>
+                    <div class="sugg-item-copy"></div>
+                </li>
+            {{/each}}
+        </ul>
+    </script>
+</div>
 ```
 
 ## 配置
