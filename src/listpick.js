@@ -12,7 +12,11 @@
 				cancelPanel: '.panel-cancel',
 				suggestWrap: '.suggest-wrap',
 				jumpTarget: 'dt'
-			}
+			},
+			list: [],
+			groupList: [],
+			itemTemplateFun: function(){},
+			suggTemplateFun: function(){}
 		},
 		setup: function(){
 			var cp = this;
